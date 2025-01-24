@@ -13,6 +13,49 @@ h1 {
     color: #4CAF50;
 }
 
+/* Layout styling */
+.container {
+    display: grid;
+    grid-template-columns: 2fr 3fr 2fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+#video-container {
+    background-color: #333;
+    width: 561px;
+    height: 315px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+#videoData {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+    box-sizing: border-box;
+}
+
+#debug {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left; /* Align logs to the left for readability */
+    max-height: 315px; /* Limit the height of the box */
+    overflow-y: auto; /* Add vertical scrolling when logs exceed the height */
+    box-sizing: border-box; /* Ensure padding is included in the height */
+    white-space: pre-wrap; /* Preserve line breaks and wrap long lines */
+}
+
+
+/* Button styling */
 button {
     background-color: #4CAF50;
     color: white;
@@ -28,39 +71,21 @@ button:hover {
     background-color: #45a049;
 }
 
-#videoData {
-    width: calc(100% - 22px);
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-bottom: 20px;
-}
-
-#video-container {
-    width: 560px; /* Set width */
-    height: 315px; /* Set height */
-    background-color: #333;
-    margin: 0 auto 20px; /* Center horizontally and add bottom margin */
-    border-radius: 5px;
+/* Button containers */
+.button-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    color: #fff;
+    margin: 10px 0;
 }
 
-#playlist-container {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #fff;
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
-
-#debug {
-    margin-top: 20px;
-    font-size: 12px;
-    color: red;
+.everything-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
 }

@@ -75,12 +75,6 @@ function weightedShuffleArray(array) {
   });
 }
 
-document.getElementById("shuffleButton").addEventListener("click", function() {
-  currentVideoIndex = -1; // Reset the current video index
-    weightedShuffleArray(videos); // Shuffle the videos array
-    showPlaylist(); // Display the shuffled playlist
-});
-
 // // Fetch video data from the text file
 // fetch('video_data.txt') // Ensure this file is hosted in the same directory
 //     .then(response => response.text())
@@ -102,27 +96,57 @@ document.getElementById("shuffleButton").addEventListener("click", function() {
 
 function fetchAndProcessVideos(name) {
   return new Promise((resolve, reject) => {
-    // Fetch the JSON file
-    fetch(`data/${name}.json`)
+    // Fetch the TXT file
+    fetch(`old_data/${name}.txt`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`Failed to fetch data from data/${name}.json`);
+          throw new Error(`Failed to fetch data from data/${name}.txt`);
         }
-        return response.json(); // Parse the response as JSON
+        return response.text(); // Parse the response as text
       })
       .then((data) => {
-        // Process the JSON data
-        data.forEach((video) => {
-          const { id, start, end, status, weight, title } = video;
+        const lines = data.split("\n"); // Split the data by lines
+        lines.forEach((line) => {
+          const parts = line.split(","); // Split the line by commas
 
-          // Check if the video is active (status is "active")
+          if (parts.length < 4) {
+            return; // Skip invalid lines
+          }
+
+          const url = parts[0];
+          const start = parseInt(parts[1]);
+          const end = parseInt(parts[2]);
+          const additionalInfo = parts[3];
+
+          // Extract the video ID using split
+          const videoId = url.split("v=")[1]?.split("&")[0];
+          if (!videoId) {
+            console.warn(`Invalid YouTube URL: ${url}`);
+            return; // Skip invalid URLs
+          }
+
+          // Default values for status and weight
+          const status = "active";
+          const weight = 1;
+
+          // Construct the video object
+          const video = {
+            id: videoId, // Use the extracted video ID
+            start,
+            end,
+            status,
+            weight,
+            title: additionalInfo, // Title from the additional info part
+          };
+
+          // Check if the video is active
           if (status === "active") {
             // Check if the video ID already exists in the videos array
-            const videoExists = videos.some((existingVideo) => existingVideo.id === id);
+            const videoExists = videos.some((existingVideo) => existingVideo.id === video.id);
 
             // If the video ID does not exist in the array, add it
             if (!videoExists) {
-              videos.push({ id, start, end, weight, title });
+              videos.push(video);
             }
           }
         });
@@ -145,7 +169,9 @@ document.getElementById("genshin").addEventListener("click", (event) => {
   fetchAndProcessVideos("genshin")
     .then(() => {
       // After processing the JSON data, show the playlist
+      weightedShuffleArray(videos)
       showPlaylist();
+      playVideos();
     })
     .catch((error) => {
       console.error("Error processing the genshin data:", error);
@@ -157,7 +183,9 @@ document.getElementById("honkai").addEventListener("click", (event) => {
   fetchAndProcessVideos("honkai")
   .then(() => {
     // After processing the JSON data, show the playlist
+    weightedShuffleArray(videos)
     showPlaylist();
+    playVideos();
   })
   .catch((error) => {
     console.error("Error processing the honkai data:", error);
@@ -169,7 +197,9 @@ document.getElementById("favorites").addEventListener("click", (event) => {
   fetchAndProcessVideos("favorites")
   .then(() => {
     // After processing the JSON data, show the playlist
+    weightedShuffleArray(videos)
     showPlaylist();
+    playVideos();
   })
   .catch((error) => {
     console.error("Error processing the favorites data:", error);
@@ -181,7 +211,9 @@ document.getElementById("others").addEventListener("click", (event) => {
   fetchAndProcessVideos("others")
   .then(() => {
     // After processing the JSON data, show the playlist
+    weightedShuffleArray(videos)
     showPlaylist();
+    playVideos();
   })
   .catch((error) => {
     console.error("Error processing the others data:", error);
@@ -194,7 +226,9 @@ document.getElementById("mixed").addEventListener("click", (event) => {
   fetchAndProcessVideos("honkai")
   .then(() => {
     // After processing the JSON data, show the playlist
+    weightedShuffleArray(videos)
     showPlaylist();
+    playVideos();
   })
   .catch((error) => {
     console.error("Error processing the mixed data:", error);
@@ -222,7 +256,9 @@ document.getElementById("gura").addEventListener("click", (event) => {
   fetchAndProcessVideos("gura")
   .then(() => {
     // After processing the JSON data, show the playlist
+    weightedShuffleArray(videos)
     showPlaylist();
+    playVideos();
   })
   .catch((error) => {
     console.error("Error processing the gura data:", error);
@@ -270,6 +306,10 @@ function playBilibiliVideo(videoId) {
 }
 
 function playVideos() {
+  if (player) {
+    player.destroy(); // Destroy the existing player instance
+    console.log("Previous player instance destroyed.");
+  }
   let index = 0; // Start with the first video
 
   function playNextVideo() {
@@ -309,8 +349,23 @@ function playPreviousVideo() {
 
 document.getElementById("Previous").addEventListener("click", playPreviousVideo);
 
-document.getElementById("PlayVideos").addEventListener("click", playVideos);
+document.getElementById("Test").addEventListener("click", () => {
+  const videoData = document.getElementById("videoData").value;
 
+  // Parse the text field data
+  videoData.split("\n").forEach((line) => {
+    let [url, start = "0", end = "99999"] = line.split(",");
+    if (url && start && end) {
+      const id = url.split("v=")[1];
+      videos.push({ id, start: parseInt(start), end: parseInt(end) });
+    }
+  });
+
+  // Initialize the YouTube Player after loading the videos
+  if (videos.length > 0) {
+    initializePlayer();
+  }
+});
 document.getElementById('bilibili').addEventListener('click', () => {
   // Fetch the Bilibili JSON file when the button is clicked
   fetch('bilibili.json')
@@ -344,8 +399,14 @@ function onPlayerStateChange(event, video) {
     loadNextVideo();
   }
 }
+
 function onPlayerError(event) {
   log("Player Error: " + event.data);
+
+  if (event.data == 150 || event.data == 101) {
+      log("This video cannot be embedded. Skipping to the next video.");
+      loadNextVideo(); // Call the function to skip to the next video
+  }
 }
 
 function loadNextVideo() {
@@ -366,7 +427,8 @@ function loadNextVideo() {
 }
 
 function log(message) {
-  console.log(message);
+  console.log(message); // Log the message to the console
   var debugDiv = document.getElementById("debug");
-  debugDiv.innerHTML += message + "<br>";
+  debugDiv.innerHTML += "<br>" + message; // Add the new message with a line break
+  debugDiv.scrollTop = debugDiv.scrollHeight; // Automatically scroll to the bottom
 }

@@ -8,23 +8,33 @@
 </head>
 <body>
     <h1>Welcome to My Video Playlist</h1>
-    <textarea id="videoData" rows="1" cols="100" placeholder="Enter video data here..."></textarea><br>
-    <button id="shuffleButton">Shuffle</button>
-    <div id="video-container"></div>
-    <button id="Previous">Previous</button>
-    <button id="skipButton">Next</button>
-    <button id="PlayVideos">Play Videos</button>
-    <button id="genshin">genshin</button>
-    <button id="bilibili">bilibili</button>
-    <button id="honkai">honkai</button>
-    <button id="mixed">mixed</button>
-    <button id="gura">gura</button>
-    <button id="others">others</button>
-    <button id="favorites">favorites</button>
-    <button id="everything">everything</button>
-    <div id="playlist-container" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; box-sizing: border-box;"></div>    
+    <div class="container">
+        <div id="video-container"></div>
+        <textarea id="videoData" rows="8" placeholder="Enter video data here..."></textarea>
+        <div id="debug">show log</div>
+    </div>
+    <div class="button-container">
+        <button id="Previous">Previous</button>
+        <button id="skipButton">Next</button>
+        <button id="Test">Test</button>
+    </div>
+    <div class="category-container">
+        <button id="genshin">genshin</button>
+        <button id="bilibili">bilibili</button>
+        <button id="honkai">honkai</button>
+        <button id="mixed">mixed</button>
+        <button id="gura">gura</button>
+        <button id="others">others</button>
+        <button id="favorites">favorites</button>
+    </div>
+    <div class="everything-container">
+        <button id="everything">everything</button>
+    </div>
+
+    <!-- Playlist container -->
+    <div id="playlist-container"></div>
+    
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script.js"></script>
-    <div id="debug"></div>    
 </body>
 </html>
