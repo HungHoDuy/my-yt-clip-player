@@ -266,6 +266,23 @@ document.getElementById("gura").addEventListener("click", (event) => {
   });
 });
 
+document.getElementById("Test").addEventListener("click", () => {
+  const videoData = document.getElementById("videoData").value;
+  // Parse the text field data
+  videoData.split("\n").forEach((line) => {
+    let [url, start = "0", end = "99999"] = line.split(",");
+    if (url && start && end) {
+      const id = url.split("v=")[1];
+      videos.push({ id, start: parseInt(start), end: parseInt(end) });
+    }
+  });
+
+  // Initialize the YouTube Player after loading the videos
+  if (videos.length > 0) {
+    playVideos();
+  }
+});
+
 function initializePlayer(videoId = "Ladu1Innw_Y", start, end) {
   log("YouTube IFrame API Ready");
   const video = { videoId: videoId, start: start, end: end };
@@ -350,23 +367,7 @@ function playPreviousVideo() {
 
 document.getElementById("Previous").addEventListener("click", playPreviousVideo);
 
-document.getElementById("Test").addEventListener("click", () => {
-  const videoData = document.getElementById("videoData").value;
 
-  // Parse the text field data
-  videoData.split("\n").forEach((line) => {
-    let [url, start = "0", end = "99999"] = line.split(",");
-    if (url && start && end) {
-      const id = url.split("v=")[1];
-      videos.push({ id, start: parseInt(start), end: parseInt(end) });
-    }
-  });
-
-  // Initialize the YouTube Player after loading the videos
-  if (videos.length > 0) {
-    initializePlayer();
-  }
-});
 document.getElementById('bilibili').addEventListener('click', () => {
   // Fetch the Bilibili JSON file when the button is clicked
   fetch('bilibili.json')
