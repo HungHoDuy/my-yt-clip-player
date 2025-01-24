@@ -1,6 +1,6 @@
 [
-    {"id": "n9H3ojaWXWk", "start": 0, "end": 342, "title": "fate_emiya", "status": "active", "weight": 1},
-    {"id": "Ladu1Innw_Y", "start": 0, "end": 108, "title": "2_4_version", "status": "active", "weight": 1},
+    {"id": "n9H3ojaWXWk", "start": 0, "end": 342, "title": "fate_emiya", "status": "active", "weight": 10},
+    {"id": "Ladu1Innw_Y", "start": 0, "end": 108, "title": "2_4_version", "status": "active", "weight": 5},
     {"id": "k8OM_bs_Y6o", "start": 63, "end": 122, "title": "3_version", "status": "active", "weight": 1},
     {"id": "BcxqzZDS5lY", "start": 73, "end": 117, "title": "3_3", "status": "active", "weight": 1},
     {"id": "K4ekeTHhNR4", "start": 0, "end": 85, "title": "3_4", "status": "active", "weight": 1},

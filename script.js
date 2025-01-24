@@ -57,6 +57,7 @@ document.getElementById("skipButton").addEventListener("click", () => {
     player.seekTo(videoDuration, true); // Seek to the end of the video
   }
 });
+
 function weightedShuffleArray(array) {
   // Calculate the total weight
   const totalWeight = array.reduce((sum, obj) => sum + obj.weight, 0);
