@@ -268,12 +268,14 @@ document.getElementById("gura").addEventListener("click", (event) => {
 
 document.getElementById("Test").addEventListener("click", () => {
   const videoData = document.getElementById("videoData").value;
+  console.log("Video Data:", videoData);
   // Parse the text field data
   videoData.split("\n").forEach((line) => {
     let [url, start = "0", end = "99999"] = line.split(",");
     if (url && start && end) {
       const id = url.split("v=")[1];
       videos.push({ id, start: parseInt(start), end: parseInt(end) });
+      console.log("Video added:", { id, start: parseInt(start), end: parseInt(end) });
     }
   });
 
